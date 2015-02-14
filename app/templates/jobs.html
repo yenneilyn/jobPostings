@@ -1,0 +1,104 @@
+<div class="container">
+	<h1 style="color:#990000">Careers at Ohio State</h1>
+	<div style="height: 200px; margin-bottom:80px;">
+		<carousel interval="interval">
+		  <slide ng-repeat="slide in jobSlides" active="slide.active">
+		    <img ng-src="{{slide.image}}" style="margin:auto;height:250px;width:100%;">
+		    <div class="carousel-caption">
+		      <p>{{slide.text}}</p>
+		    </div>
+		  </slide>
+		</carousel>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				Search Jobs
+			</h4>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-3">
+					<span>Keywords:</span>
+				</div>
+				<div class="col-md-3">
+					<input ng-model="search.$">
+				</div>
+				<div class="col-md-3">
+					<span>Working Title:</span>
+				</div>
+				<div class="col-md-3">
+					<input ng-model="search.title">
+				</div>
+			</div>
+			<br/>
+			<div class="row">
+				<div class="col-md-3">
+					<span>Job Opening Number:</span>
+				</div>
+				<div class="col-md-3">
+					<input ng-model="search.jobNumber">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<h4>Search Results <span class="badge" ng-bind="filtered.length"></span></h4>
+
+	<table class="table table-hover">
+		<thead style="border-bottom:1px solid;">
+			<tr>
+				<th ng-click="reverse=!reverse;order('jobNumber', reverse);num=1" style="cursor:pointer;">Job Opening Number <i class="fa fa-sort-desc" ng-show="reverse==true&&num==1"></i><i class="fa fa-sort-asc" ng-show="reverse==false&&num==1"></i></th>
+				<th ng-click="titleReverse=!titleReverse;order('title', titleReverse);num=2" style="cursor:pointer;">Working Title <i class="fa fa-sort-desc" ng-show="titleReverse==true && num==2"></i><i class="fa fa-sort-asc" ng-show="titleReverse==false&&num==2"></i></th>
+				<th ng-click="depReverse=!depReverse;order('department', depReverse);num=3" style="cursor:pointer;">Department <i class="fa fa-sort-desc" ng-show="depReverse==true && num==3"></i><i class="fa fa-sort-asc" ng-show="depReverse==false&&num==3"></i></th>
+				<th ng-click="reverse=!reverse;order('deadline', reverse);num=4" style="cursor:pointer;">Deadline <i class="fa fa-sort-desc" ng-show="reverse==true&&num==4"></i><i class="fa fa-sort-asc" ng-show="reverse==false&&num==4"></i></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="job in filtered = (jobs | filter:search | orderBy:predicate:reverse )" ng-click="viewJobDetail(job.jobNumber)" style="cursor:pointer;">
+				<td>{{job.jobNumber}}</td>
+				<td>{{job.title}}</td>
+				<td>{{job.department}}</td>
+				<td>{{job.deadline}}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div>
+		<h6>Recently Applied</h6>
+		<ul>
+			<li ng-repeat="job in applications"> {{job.jobNumber}} {{job.title}}</li>
+		</ul>
+	</div>
+</div>
+
+<script type="text/ng-template" id="jobDetail.html">
+		<div class="modal-header">
+            <h4 class="modal-title">{{selectedJob.title}}</h4>
+        </div>
+        <div class="modal-body">
+        <h4>Position Information</h4>
+	       	<table class="table">
+	       		<tr>
+	       			<td>Duties</td>
+	       			<td>{{selectedJob.duties}}</td>
+	       		</tr>
+	       		<tr>
+	       			<td>Qualifications</td>
+	       			<td>{{selectedJob.qualifications}}</td>
+	       		<tr/>
+	       		<tr>
+	       			<td>Contact Name</td>
+	       			<td>{{selectedJob.contactName}}</td>
+	       		</tr>	
+	       		<tr>
+	       			<td>Contact Number</td>
+	       			<td>{{selectedJob.contactNum}}</td>
+	       		</tr>
+	       	</table> 	
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" ng-click="apply(selectedJob)">Apply</button>
+            <button class="btn btn-success" ng-click="cancel()">Cancel</button>
+        </div>
+</script>
